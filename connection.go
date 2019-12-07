@@ -126,8 +126,8 @@ func (c *Connection) DoQuery(path string, query []byte) (body []byte, statusCode
 	return body, resp.StatusCode(), err
 }
 
-// DoQueryDict do some query
-func (c *Connection) DoQueryDict(path string, v interface{}) (body []byte, statusCode int, err error) {
+// DoQueryObject do some query
+func (c *Connection) DoQueryObject(path string, v interface{}) (body []byte, statusCode int, err error) {
 	query, err := json.Marshal(v)
 
 	if err != nil {
