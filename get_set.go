@@ -9,13 +9,13 @@ import (
 const URLGet = "get/"
 
 // URLCGet url for get item(s) from key tables (ItemInt or ItemString)
-const URLCGet = "get_c/"
+const URLCGet = "get/c/"
 
 // URLSet url for set item(s) into key tables (json)
 const URLSet = "set/"
 
 // URLCSet url for set item(s) into key tables (ItemInt or ItemString)
-const URLCSet = "set_c/"
+const URLCSet = "set/c/"
 
 // StatusCodeOK query status code
 const StatusCodeOK = 200
