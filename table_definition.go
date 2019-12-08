@@ -33,8 +33,8 @@ type TableDefinition struct {
 
 	ItemsStruct *ItemStruct `json:"items_struct,omitempty"`
 
-	Version   int    `json:"version,omitempty"`
-	IsDeleted string `json:"is_deleted,omitempty"`
+	Version   int  `json:"version,omitempty"`
+	IsDeleted bool `json:"is_deleted,omitempty"`
 }
 
 // ClearLocalInfo - remove local info

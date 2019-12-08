@@ -92,11 +92,11 @@ type ItemStringStat struct {
 }
 
 // Stat - get stat object
-func (i ItemString) Stat() ItemStringStat {
+func (itm ItemString) Stat() ItemStringStat {
 	return ItemStringStat{
-		Key:       i.Key,
-		Rv:        i.Rv,
-		IsRemoved: i.IsRemoved,
-		ShardKey:  i.ShardKey,
+		Key:       itm.Key,
+		Rv:        itm.Rv,
+		IsRemoved: itm.IsRemoved,
+		ShardKey:  itm.ShardKey,
 	}
 }
