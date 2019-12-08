@@ -14,6 +14,11 @@ type ItemInt struct {
 	ShardKey  int64           `json:"sk,omitempty"`
 }
 
+// Less itm1 less then itm2
+func (itm ItemInt) Less(itm2 ItemInt) bool {
+	return itm.Key < itm2.Key
+}
+
 // ItemIntMakeFromJSONObject create ItemInt from json
 func ItemIntMakeFromJSONObject(msg json.RawMessage, is *ItemStruct) (itm ItemInt, err error) {
 
