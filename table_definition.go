@@ -31,6 +31,8 @@ type TableDefinition struct {
 	PublicParams json.RawMessage `json:"public_params,omitempty"`
 	LocalParams  json.RawMessage `json:"local_params,omitempty"`
 
+	MetaData json.RawMessage `json:"meta,omitempty"`
+
 	ItemsStruct *ItemStruct `json:"items_struct,omitempty"`
 
 	Version   int  `json:"version,omitempty"`
@@ -46,6 +48,7 @@ func (td TableDefinition) ClearLocalInfo() TableDefinition {
 		KeyType:      td.KeyType,
 		ShardKeys:    td.ShardKeys,
 		PublicParams: td.PublicParams,
+		MetaData:     td.MetaData,
 		ItemsStruct:  td.ItemsStruct,
 		Version:      td.Version,
 		IsDeleted:    td.IsDeleted,
