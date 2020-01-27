@@ -1,6 +1,7 @@
 package mdp
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"time"
@@ -10,16 +11,17 @@ import (
 
 // Connection connection to myfdb
 type Connection struct {
-	Servers      []string
-	Token        string
-	QueryTimeout time.Duration
-	QueryWait    time.Duration
-	client       *fasthttp.Client
+	Servers             []string
+	Token               string
+	IgnoreSSLValidation bool
+	QueryTimeout        time.Duration
+	QueryWait           time.Duration
+	client              *fasthttp.Client
 }
 
 // CreateConnection Create connection to
 func CreateConnection(servers []string, token string, maxConnsPerHost int, maxIdleConnDuration time.Duration,
-	queryTimeout time.Duration, queryWait time.Duration) *Connection {
+	queryTimeout time.Duration, queryWait time.Duration, ignoreSSLValidation bool) *Connection {
 
 	c := &Connection{
 		Servers:      servers,
@@ -29,6 +31,9 @@ func CreateConnection(servers []string, token string, maxConnsPerHost int, maxId
 		client: &fasthttp.Client{
 			MaxConnsPerHost:     maxConnsPerHost,
 			MaxIdleConnDuration: maxIdleConnDuration,
+			TLSConfig: &tls.Config{
+				InsecureSkipVerify: ignoreSSLValidation,
+			},
 		},
 	}
 
@@ -39,7 +44,10 @@ func CreateConnection(servers []string, token string, maxConnsPerHost int, maxId
 type ConnectionFileStruct struct {
 	Server  *string  `json:"server,omitempty"`
 	Servers []string `json:"servers,omitempty"`
-	Token   string   `json:"token"`
+
+	IgnoreSSLValidation bool `json:"ignor_ssl_validation,omitempty"`
+
+	Token string `json:"token"`
 
 	QueryTimeout time.Duration `json:"query_timeout,omitempty"`
 	QueryWait    time.Duration `json:"query_wait,omitempty"`
@@ -51,32 +59,21 @@ type ConnectionFileStruct struct {
 // ConnectionGetFromConnectionFileStruct get ConnectionFileStruct from json and
 func ConnectionGetFromConnectionFileStruct(cfs ConnectionFileStruct) *Connection {
 	c := &Connection{
-		Servers:      cfs.Servers,
-		Token:        cfs.Token,
-		QueryTimeout: 4 * time.Second,
-		QueryWait:    5 * time.Second,
+		Servers:             cfs.Servers,
+		Token:               cfs.Token,
+		IgnoreSSLValidation: cfs.IgnoreSSLValidation,
+		QueryTimeout:        cfs.QueryTimeout,
+		QueryWait:           cfs.QueryWait,
 		client: &fasthttp.Client{
-			MaxConnsPerHost:     5,
-			MaxIdleConnDuration: 600 * time.Second,
+			MaxConnsPerHost:     cfs.MaxConnsPerHost,
+			MaxIdleConnDuration: cfs.MaxIdleConnDuration,
+			TLSConfig: &tls.Config{
+				InsecureSkipVerify: cfs.IgnoreSSLValidation,
+			},
 		},
 	}
 	if cfs.Server != nil {
 		c.Servers = append(c.Servers, *cfs.Server)
-	}
-
-	if cfs.MaxConnsPerHost > 0 {
-		c.client.MaxConnsPerHost = cfs.MaxConnsPerHost
-	}
-	if cfs.MaxIdleConnDuration > 0 {
-		c.client.MaxIdleConnDuration = cfs.MaxIdleConnDuration
-	}
-
-	if cfs.QueryTimeout > 0 {
-		c.QueryTimeout = cfs.QueryWait
-	}
-
-	if cfs.QueryWait > 0 {
-		c.QueryWait = cfs.QueryWait
 	}
 
 	return c
@@ -85,7 +82,13 @@ func ConnectionGetFromConnectionFileStruct(cfs ConnectionFileStruct) *Connection
 // ConnectionGetFromJSON get Connection from json
 func ConnectionGetFromJSON(d []byte) (*Connection, error) {
 
-	var cfs ConnectionFileStruct
+	cfs := ConnectionFileStruct{
+		QueryTimeout:        4 * time.Second,
+		QueryWait:           5 * time.Second,
+		MaxConnsPerHost:     5,
+		MaxIdleConnDuration: 600 * time.Second,
+	}
+
 	err := json.Unmarshal(d, &cfs)
 	if err != nil {
 		return nil, err

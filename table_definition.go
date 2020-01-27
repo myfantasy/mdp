@@ -35,8 +35,8 @@ type TableDefinition struct {
 
 	ItemsStruct *ItemStruct `json:"items_struct,omitempty"`
 
-	Version   int  `json:"version,omitempty"`
-	IsDeleted bool `json:"is_deleted,omitempty"`
+	Version   int64 `json:"version,omitempty"`
+	IsDeleted bool  `json:"is_deleted,omitempty"`
 }
 
 // ClearLocalInfo - remove local info
@@ -81,6 +81,8 @@ type StructSetQuery struct {
 	// priority 2
 	AlterTable           *TableDefinition `json:"alter_table,omitempty"`
 	AlterShardKeysGlobal bool             `json:"alter_shard_keys_global,omitempty"`
+
+	GetServerInfo bool `json:"get_server_info,omitempty"`
 }
 
 // StructGet struct get result
@@ -90,8 +92,7 @@ type StructGet struct {
 
 	Tables []TableDefinition `json:"tables,omitempty"`
 
-	ServerName       string `json:"server_name,omitempty"`
-	LastTableVersion string `json:"last_table_version,omitempty"`
+	LastTableVersion int64 `json:"last_table_version,omitempty"`
 }
 
 // QueryStructGet send any query waiting StructGet

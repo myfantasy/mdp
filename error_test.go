@@ -21,11 +21,11 @@ func TestErrors(t *testing.T) {
 		t.Fatal("error v1 fail", err)
 	}
 
-	if `{"msg":"msg1","ie":"ttt"}` != string(b1) {
-		t.Fatal("Error 1 fail")
+	if `{"code":50000,"msg":"msg1","ie":"ttt"}` != string(b1) {
+		t.Fatal("Error 1 fail", string(b1))
 	}
 
-	if `{"msg":"msg2","ie":"ttt\nmsg1\nttt"}` != string(b2) {
+	if `{"code":50000,"msg":"msg2","ie":"ttt\nmsg1\nttt"}` != string(b2) {
 		t.Fatal("Error 2 fail")
 	}
 }
