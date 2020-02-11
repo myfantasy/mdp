@@ -81,5 +81,5 @@ func (c *Connection) StructStorageRawGet(sgq StructStorageGetQuery) StructStorag
 
 // StructStorageRawSet set struct by query
 func (c *Connection) StructStorageRawSet(ssq StructStorageSetQuery) StructStorageGet {
-	return c.QueryStructStorageGet(URLStructStorageGet, ssq)
+	return c.QueryStructStorageGet(URLStructStorageSet, ssq)
 }

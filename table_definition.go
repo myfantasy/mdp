@@ -125,5 +125,5 @@ func (c *Connection) StructRawGet(sgq StructGetQuery) StructGet {
 
 // StructRawSet set struct by query
 func (c *Connection) StructRawSet(ssq StructSetQuery) StructGet {
-	return c.QueryStructGet(URLStructGet, ssq)
+	return c.QueryStructGet(URLStructSet, ssq)
 }
