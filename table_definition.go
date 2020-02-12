@@ -25,6 +25,7 @@ type TableDefinition struct {
 	KeyType   string `json:"key_type"`
 
 	StoragePlace string `json:"storage,omitempty"`
+	FlushTimeout string `json:"flush_timeout,omitempty"`
 
 	ShardKeys []int64 `json:"shard_keys,omitempty"`
 
