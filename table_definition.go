@@ -3,6 +3,7 @@ package mdp
 import (
 	"encoding/json"
 	"strconv"
+	"time"
 )
 
 // URLStructGet url for get struct
@@ -24,8 +25,8 @@ type TableDefinition struct {
 	TableType string `json:"type"`
 	KeyType   string `json:"key_type"`
 
-	StoragePlace string `json:"storage,omitempty"`
-	FlushTimeout string `json:"flush_timeout,omitempty"`
+	StoragePlace string        `json:"storage,omitempty"`
+	FlushTimeout time.Duration `json:"flush_timeout,omitempty"`
 
 	ShardKeys []int64 `json:"shard_keys,omitempty"`
 
