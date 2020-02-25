@@ -1,25 +1,20 @@
 package mdp
 
-import (
-	"encoding/json"
-	"testing"
-)
-
 const connStringTest = `{"server":"http://localhost:9170/", "token":"abc"}`
 
-func TestItemsGetQuery(t *testing.T) {
-	ti := ItemsGetQuery{TableName: "ttbl_n", IKeys: &[]int64{5, 7, 10}}
+// func TestItemsGetQuery(t *testing.T) {
+// 	ti := ItemsGetQuery{TableName: "ttbl_n", IKeys: &[]int64{5, 7, 10}}
 
-	b, err := json.Marshal(ti)
+// 	b, err := json.Marshal(ti)
 
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	if string(b) != `{"table":"ttbl_n","iks":[5,7,10]}` {
-		t.Fatal("Error convert to json", string(b))
-	}
-}
+// 	if string(b) != `{"table":"ttbl_n","iks":[5,7,10]}` {
+// 		t.Fatal("Error convert to json", string(b))
+// 	}
+// }
 
 // func TestAllDataIGet(t *testing.T) {
 // 	c, err := ConnectionGetFromJSON([]byte(connStringTest))

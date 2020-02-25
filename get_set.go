@@ -8,14 +8,8 @@ import (
 // URLGet url for get item(s) from key tables (json)
 const URLGet = "get/"
 
-// URLCGet url for get item(s) from key tables (ItemInt or ItemString)
-const URLCGet = "get/c/"
-
 // URLSet url for set item(s) into key tables (json)
 const URLSet = "set/"
-
-// URLCSet url for set item(s) into key tables (ItemInt or ItemString)
-const URLCSet = "set/c/"
 
 // StatusCodeOK query status code
 const StatusCodeOK = 200
@@ -77,75 +71,10 @@ type ItemsGet struct {
 	ParamsErr   *Error `json:"params_err,omitempty"`
 	InternalErr *Error `json:"internal_err,omitempty"`
 
-	Items []json.RawMessage `json:"itms,omitempty"`
+	IItems []ItemInt    `json:"iitms,omitempty"`
+	SItems []ItemString `json:"sitms,omitempty"`
 
 	Count int `json:"cnt,omitempty"`
-}
-
-// IItemsGet items get result
-type IItemsGet struct {
-	ParamsErr   *Error `json:"params_err,omitempty"`
-	InternalErr *Error `json:"internal_err,omitempty"`
-
-	Items []ItemInt `json:"itms,omitempty"`
-
-	Count int `json:"cnt,omitempty"`
-}
-
-// SItemsGet items get result
-type SItemsGet struct {
-	ParamsErr   *Error `json:"params_err,omitempty"`
-	InternalErr *Error `json:"internal_err,omitempty"`
-
-	Items []ItemString `json:"itms,omitempty"`
-
-	Count int `json:"cnt,omitempty"`
-}
-
-// QueryIItemsGet send any query waiting IItemsGet
-func (c *Connection) QueryIItemsGet(path string, v interface{}) (res IItemsGet) {
-	body, statusCode, err := c.DoQueryObject(path, v)
-	if err != nil {
-		res.InternalErr = ErrorE(err)
-		return res
-	}
-
-	err = json.Unmarshal(body, &res)
-	if err != nil {
-		res.InternalErr = ErrorNew("status_code = "+strconv.Itoa(statusCode), err)
-		return res
-	}
-
-	if statusCode != StatusCodeOK {
-		if res.InternalErr == nil && res.ParamsErr == nil {
-			res.InternalErr = ErrorS("status_code = " + strconv.Itoa(statusCode))
-		}
-	}
-
-	return res
-}
-
-// QuerySItemsGet send any query waiting SItemsGet
-func (c *Connection) QuerySItemsGet(path string, v interface{}) (res SItemsGet) {
-	body, statusCode, err := c.DoQueryObject(path, v)
-	if err != nil {
-		res.InternalErr = ErrorE(err)
-		return res
-	}
-
-	err = json.Unmarshal(body, &res)
-	if err != nil {
-		res.InternalErr = ErrorNew("status_code = "+strconv.Itoa(statusCode), err)
-		return res
-	}
-
-	if statusCode != StatusCodeOK {
-		if res.InternalErr == nil && res.ParamsErr == nil {
-			res.InternalErr = ErrorS("status_code = " + strconv.Itoa(statusCode))
-		}
-	}
-
-	return res
 }
 
 // QueryItemsGet send any query waiting ItemsGet
@@ -158,7 +87,7 @@ func (c *Connection) QueryItemsGet(path string, v interface{}) (res ItemsGet) {
 
 	err = json.Unmarshal(body, &res)
 	if err != nil {
-		res.InternalErr = ErrorNew("status_code = "+strconv.Itoa(statusCode), err)
+		res.InternalErr = ErrorNew("Unmarshal fail = "+string(body)+", status_code = "+strconv.Itoa(statusCode), err)
 		return res
 	}
 
@@ -171,29 +100,9 @@ func (c *Connection) QueryItemsGet(path string, v interface{}) (res ItemsGet) {
 	return res
 }
 
-// IItemsRawGet get IItems by query
-func (c *Connection) IItemsRawGet(igq ItemsGetQuery) IItemsGet {
-	return c.QueryIItemsGet(URLCGet, igq)
-}
-
-// SItemsRawGet get IItems by query
-func (c *Connection) SItemsRawGet(igq ItemsGetQuery) SItemsGet {
-	return c.QuerySItemsGet(URLCGet, igq)
-}
-
 // ItemsRawGet get IItems by query
 func (c *Connection) ItemsRawGet(igq ItemsGetQuery) ItemsGet {
 	return c.QueryItemsGet(URLGet, igq)
-}
-
-// IItemsRawSet set IItems by query
-func (c *Connection) IItemsRawSet(isq ItemsSetQuery) IItemsGet {
-	return c.QueryIItemsGet(URLCSet, isq)
-}
-
-// SItemsRawSet set IItems by query
-func (c *Connection) SItemsRawSet(isq ItemsSetQuery) SItemsGet {
-	return c.QuerySItemsGet(URLCSet, isq)
 }
 
 // ItemsRawSet set IItems by query
