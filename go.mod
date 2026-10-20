@@ -1,9 +1,10 @@
 module github.com/myfantasy/mdp
 
-go 1.13
+go 1.24
+
+require github.com/valyala/fasthttp v1.9.0
 
 require (
-	github.com/klauspost/compress v1.10.0 // indirect
-	github.com/klauspost/cpuid v1.2.3 // indirect
-	github.com/valyala/fasthttp v1.9.0
+	github.com/klauspost/compress v1.18.7 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
 )
